@@ -11,7 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
- * A Historique.
+ * A Historique. by
  */
 @Entity
 @Table(name = "historique")
