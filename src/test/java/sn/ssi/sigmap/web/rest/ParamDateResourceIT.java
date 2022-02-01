@@ -1,6 +1,7 @@
 package sn.ssi.sigmap.web.rest;
 
 import sn.ssi.sigmap.PlanpassationmsApp;
+import sn.ssi.sigmap.config.TestSecurityConfiguration;
 import sn.ssi.sigmap.domain.ParamDate;
 import sn.ssi.sigmap.repository.ParamDateRepository;
 import sn.ssi.sigmap.service.ParamDateService;
@@ -23,13 +24,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link ParamDateResource} REST controller.
  */
-@SpringBootTest(classes = PlanpassationmsApp.class)
+@SpringBootTest(classes = { PlanpassationmsApp.class, TestSecurityConfiguration.class })
 @AutoConfigureMockMvc
 @WithMockUser
 public class ParamDateResourceIT {
@@ -88,7 +90,7 @@ public class ParamDateResourceIT {
         int databaseSizeBeforeCreate = paramDateRepository.findAll().size();
         // Create the ParamDate
         ParamDateDTO paramDateDTO = paramDateMapper.toDto(paramDate);
-        restParamDateMockMvc.perform(post("/api/param-dates")
+        restParamDateMockMvc.perform(post("/api/param-dates").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(paramDateDTO)))
             .andExpect(status().isCreated());
@@ -110,7 +112,7 @@ public class ParamDateResourceIT {
         ParamDateDTO paramDateDTO = paramDateMapper.toDto(paramDate);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restParamDateMockMvc.perform(post("/api/param-dates")
+        restParamDateMockMvc.perform(post("/api/param-dates").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(paramDateDTO)))
             .andExpect(status().isBadRequest());
@@ -172,7 +174,7 @@ public class ParamDateResourceIT {
             .dateCreat(UPDATED_DATE_CREAT);
         ParamDateDTO paramDateDTO = paramDateMapper.toDto(updatedParamDate);
 
-        restParamDateMockMvc.perform(put("/api/param-dates")
+        restParamDateMockMvc.perform(put("/api/param-dates").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(paramDateDTO)))
             .andExpect(status().isOk());
@@ -193,7 +195,7 @@ public class ParamDateResourceIT {
         ParamDateDTO paramDateDTO = paramDateMapper.toDto(paramDate);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restParamDateMockMvc.perform(put("/api/param-dates")
+        restParamDateMockMvc.perform(put("/api/param-dates").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(paramDateDTO)))
             .andExpect(status().isBadRequest());
@@ -212,7 +214,7 @@ public class ParamDateResourceIT {
         int databaseSizeBeforeDelete = paramDateRepository.findAll().size();
 
         // Delete the paramDate
-        restParamDateMockMvc.perform(delete("/api/param-dates/{id}", paramDate.getId())
+        restParamDateMockMvc.perform(delete("/api/param-dates/{id}", paramDate.getId()).with(csrf())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 

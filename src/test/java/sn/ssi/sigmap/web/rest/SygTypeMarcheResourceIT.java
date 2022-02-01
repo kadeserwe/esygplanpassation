@@ -1,6 +1,7 @@
 package sn.ssi.sigmap.web.rest;
 
 import sn.ssi.sigmap.PlanpassationmsApp;
+import sn.ssi.sigmap.config.TestSecurityConfiguration;
 import sn.ssi.sigmap.domain.SygTypeMarche;
 import sn.ssi.sigmap.repository.SygTypeMarcheRepository;
 import sn.ssi.sigmap.service.SygTypeMarcheService;
@@ -23,13 +24,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link SygTypeMarcheResource} REST controller.
  */
-@SpringBootTest(classes = PlanpassationmsApp.class)
+@SpringBootTest(classes = { PlanpassationmsApp.class, TestSecurityConfiguration.class })
 @AutoConfigureMockMvc
 @WithMockUser
 public class SygTypeMarcheResourceIT {
@@ -101,7 +103,7 @@ public class SygTypeMarcheResourceIT {
         int databaseSizeBeforeCreate = sygTypeMarcheRepository.findAll().size();
         // Create the SygTypeMarche
         SygTypeMarcheDTO sygTypeMarcheDTO = sygTypeMarcheMapper.toDto(sygTypeMarche);
-        restSygTypeMarcheMockMvc.perform(post("/api/syg-type-marches")
+        restSygTypeMarcheMockMvc.perform(post("/api/syg-type-marches").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygTypeMarcheDTO)))
             .andExpect(status().isCreated());
@@ -125,7 +127,7 @@ public class SygTypeMarcheResourceIT {
         SygTypeMarcheDTO sygTypeMarcheDTO = sygTypeMarcheMapper.toDto(sygTypeMarche);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restSygTypeMarcheMockMvc.perform(post("/api/syg-type-marches")
+        restSygTypeMarcheMockMvc.perform(post("/api/syg-type-marches").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygTypeMarcheDTO)))
             .andExpect(status().isBadRequest());
@@ -147,7 +149,7 @@ public class SygTypeMarcheResourceIT {
         SygTypeMarcheDTO sygTypeMarcheDTO = sygTypeMarcheMapper.toDto(sygTypeMarche);
 
 
-        restSygTypeMarcheMockMvc.perform(post("/api/syg-type-marches")
+        restSygTypeMarcheMockMvc.perform(post("/api/syg-type-marches").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygTypeMarcheDTO)))
             .andExpect(status().isBadRequest());
@@ -167,7 +169,7 @@ public class SygTypeMarcheResourceIT {
         SygTypeMarcheDTO sygTypeMarcheDTO = sygTypeMarcheMapper.toDto(sygTypeMarche);
 
 
-        restSygTypeMarcheMockMvc.perform(post("/api/syg-type-marches")
+        restSygTypeMarcheMockMvc.perform(post("/api/syg-type-marches").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygTypeMarcheDTO)))
             .andExpect(status().isBadRequest());
@@ -523,7 +525,7 @@ public class SygTypeMarcheResourceIT {
             .description(UPDATED_DESCRIPTION);
         SygTypeMarcheDTO sygTypeMarcheDTO = sygTypeMarcheMapper.toDto(updatedSygTypeMarche);
 
-        restSygTypeMarcheMockMvc.perform(put("/api/syg-type-marches")
+        restSygTypeMarcheMockMvc.perform(put("/api/syg-type-marches").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygTypeMarcheDTO)))
             .andExpect(status().isOk());
@@ -546,7 +548,7 @@ public class SygTypeMarcheResourceIT {
         SygTypeMarcheDTO sygTypeMarcheDTO = sygTypeMarcheMapper.toDto(sygTypeMarche);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restSygTypeMarcheMockMvc.perform(put("/api/syg-type-marches")
+        restSygTypeMarcheMockMvc.perform(put("/api/syg-type-marches").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygTypeMarcheDTO)))
             .andExpect(status().isBadRequest());
@@ -565,7 +567,7 @@ public class SygTypeMarcheResourceIT {
         int databaseSizeBeforeDelete = sygTypeMarcheRepository.findAll().size();
 
         // Delete the sygTypeMarche
-        restSygTypeMarcheMockMvc.perform(delete("/api/syg-type-marches/{id}", sygTypeMarche.getId())
+        restSygTypeMarcheMockMvc.perform(delete("/api/syg-type-marches/{id}", sygTypeMarche.getId()).with(csrf())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 

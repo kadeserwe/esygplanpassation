@@ -4,25 +4,19 @@
     {
       "fieldName": "tableName",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "maxlength"
-      ],
+      "fieldValidateRules": ["maxlength"],
       "fieldValidateRulesMaxlength": "64"
     },
     {
       "fieldName": "labelName",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "maxlength"
-      ],
+      "fieldValidateRules": ["maxlength"],
       "fieldValidateRulesMaxlength": "100"
     },
     {
       "fieldName": "columnName",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "maxlength"
-      ],
+      "fieldValidateRules": ["maxlength"],
       "fieldValidateRulesMaxlength": "50"
     },
     {

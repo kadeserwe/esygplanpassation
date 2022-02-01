@@ -1,6 +1,7 @@
 package sn.ssi.sigmap.web.rest;
 
 import sn.ssi.sigmap.PlanpassationmsApp;
+import sn.ssi.sigmap.config.TestSecurityConfiguration;
 import sn.ssi.sigmap.domain.ConfSequanceGenerator;
 import sn.ssi.sigmap.repository.ConfSequanceGeneratorRepository;
 import sn.ssi.sigmap.service.ConfSequanceGeneratorService;
@@ -19,13 +20,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link ConfSequanceGeneratorResource} REST controller.
  */
-@SpringBootTest(classes = PlanpassationmsApp.class)
+@SpringBootTest(classes = { PlanpassationmsApp.class, TestSecurityConfiguration.class })
 @AutoConfigureMockMvc
 @WithMockUser
 public class ConfSequanceGeneratorResourceIT {
@@ -85,7 +87,7 @@ public class ConfSequanceGeneratorResourceIT {
     public void createConfSequanceGenerator() throws Exception {
         int databaseSizeBeforeCreate = confSequanceGeneratorRepository.findAll().size();
         // Create the ConfSequanceGenerator
-        restConfSequanceGeneratorMockMvc.perform(post("/api/conf-sequance-generators")
+        restConfSequanceGeneratorMockMvc.perform(post("/api/conf-sequance-generators").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(confSequanceGenerator)))
             .andExpect(status().isCreated());
@@ -107,7 +109,7 @@ public class ConfSequanceGeneratorResourceIT {
         confSequanceGenerator.setId(1L);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restConfSequanceGeneratorMockMvc.perform(post("/api/conf-sequance-generators")
+        restConfSequanceGeneratorMockMvc.perform(post("/api/conf-sequance-generators").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(confSequanceGenerator)))
             .andExpect(status().isBadRequest());
@@ -171,7 +173,7 @@ public class ConfSequanceGeneratorResourceIT {
             .nomTable(UPDATED_NOM_TABLE)
             .currentValue(UPDATED_CURRENT_VALUE);
 
-        restConfSequanceGeneratorMockMvc.perform(put("/api/conf-sequance-generators")
+        restConfSequanceGeneratorMockMvc.perform(put("/api/conf-sequance-generators").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(updatedConfSequanceGenerator)))
             .andExpect(status().isOk());
@@ -190,7 +192,7 @@ public class ConfSequanceGeneratorResourceIT {
         int databaseSizeBeforeUpdate = confSequanceGeneratorRepository.findAll().size();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restConfSequanceGeneratorMockMvc.perform(put("/api/conf-sequance-generators")
+        restConfSequanceGeneratorMockMvc.perform(put("/api/conf-sequance-generators").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(confSequanceGenerator)))
             .andExpect(status().isBadRequest());
@@ -209,7 +211,7 @@ public class ConfSequanceGeneratorResourceIT {
         int databaseSizeBeforeDelete = confSequanceGeneratorRepository.findAll().size();
 
         // Delete the confSequanceGenerator
-        restConfSequanceGeneratorMockMvc.perform(delete("/api/conf-sequance-generators/{id}", confSequanceGenerator.getId())
+        restConfSequanceGeneratorMockMvc.perform(delete("/api/conf-sequance-generators/{id}", confSequanceGenerator.getId()).with(csrf())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 

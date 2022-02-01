@@ -13,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -48,13 +46,6 @@ public class PlanPassationServiceImpl implements PlanPassationService {
     public Page<PlanPassationDTO> findAll(Pageable pageable) {
         log.debug("Request to get all PlanPassations");
         return planPassationRepository.findAll(pageable)
-            .map(planPassationMapper::toDto);
-    }
-
-    @Override
-    @Transactional(readOnly = true)
-    public Page<PlanPassationDTO> findPlanPassationsByDates(LocalDate fromDate, LocalDate toDate, Pageable pageable) {
-        return planPassationRepository.findAllByDateCreationBetween(fromDate, toDate, pageable)
             .map(planPassationMapper::toDto);
     }
 

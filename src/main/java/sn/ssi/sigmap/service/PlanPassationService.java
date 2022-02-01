@@ -5,8 +5,6 @@ import sn.ssi.sigmap.service.dto.PlanPassationDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.util.Optional;
 
 /**
@@ -30,13 +28,6 @@ public interface PlanPassationService {
      */
     Page<PlanPassationDTO> findAll(Pageable pageable);
 
-    /**
-     * Get all the planPassations.
-     *
-     * @param pageable the pagination information.
-     * @return the list of entities.
-     */
-    Page<PlanPassationDTO> findPlanPassationsByDates(LocalDate fromDate, LocalDate toDate, Pageable pageable);
 
     /**
      * Get the "id" planPassation.

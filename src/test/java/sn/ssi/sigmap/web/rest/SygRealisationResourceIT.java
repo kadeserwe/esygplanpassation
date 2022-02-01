@@ -1,6 +1,7 @@
 package sn.ssi.sigmap.web.rest;
 
 import sn.ssi.sigmap.PlanpassationmsApp;
+import sn.ssi.sigmap.config.TestSecurityConfiguration;
 import sn.ssi.sigmap.domain.SygRealisation;
 import sn.ssi.sigmap.repository.SygRealisationRepository;
 import sn.ssi.sigmap.service.SygRealisationService;
@@ -22,13 +23,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link SygRealisationResource} REST controller.
  */
-@SpringBootTest(classes = PlanpassationmsApp.class)
+@SpringBootTest(classes = { PlanpassationmsApp.class, TestSecurityConfiguration.class })
 @AutoConfigureMockMvc
 @WithMockUser
 public class SygRealisationResourceIT {
@@ -188,7 +190,7 @@ public class SygRealisationResourceIT {
     public void createSygRealisation() throws Exception {
         int databaseSizeBeforeCreate = sygRealisationRepository.findAll().size();
         // Create the SygRealisation
-        restSygRealisationMockMvc.perform(post("/api/syg-realisations")
+        restSygRealisationMockMvc.perform(post("/api/syg-realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygRealisation)))
             .andExpect(status().isCreated());
@@ -230,7 +232,7 @@ public class SygRealisationResourceIT {
         sygRealisation.setId(1L);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restSygRealisationMockMvc.perform(post("/api/syg-realisations")
+        restSygRealisationMockMvc.perform(post("/api/syg-realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygRealisation)))
             .andExpect(status().isBadRequest());
@@ -251,7 +253,7 @@ public class SygRealisationResourceIT {
         // Create the SygRealisation, which fails.
 
 
-        restSygRealisationMockMvc.perform(post("/api/syg-realisations")
+        restSygRealisationMockMvc.perform(post("/api/syg-realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygRealisation)))
             .andExpect(status().isBadRequest());
@@ -270,7 +272,7 @@ public class SygRealisationResourceIT {
         // Create the SygRealisation, which fails.
 
 
-        restSygRealisationMockMvc.perform(post("/api/syg-realisations")
+        restSygRealisationMockMvc.perform(post("/api/syg-realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygRealisation)))
             .andExpect(status().isBadRequest());
@@ -392,7 +394,7 @@ public class SygRealisationResourceIT {
             .dateNotifContrat(UPDATED_DATE_NOTIF_CONTRAT)
             .dateApprobationContrat(UPDATED_DATE_APPROBATION_CONTRAT);
 
-        restSygRealisationMockMvc.perform(put("/api/syg-realisations")
+        restSygRealisationMockMvc.perform(put("/api/syg-realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(updatedSygRealisation)))
             .andExpect(status().isOk());
@@ -431,7 +433,7 @@ public class SygRealisationResourceIT {
         int databaseSizeBeforeUpdate = sygRealisationRepository.findAll().size();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restSygRealisationMockMvc.perform(put("/api/syg-realisations")
+        restSygRealisationMockMvc.perform(put("/api/syg-realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygRealisation)))
             .andExpect(status().isBadRequest());
@@ -450,7 +452,7 @@ public class SygRealisationResourceIT {
         int databaseSizeBeforeDelete = sygRealisationRepository.findAll().size();
 
         // Delete the sygRealisation
-        restSygRealisationMockMvc.perform(delete("/api/syg-realisations/{id}", sygRealisation.getId())
+        restSygRealisationMockMvc.perform(delete("/api/syg-realisations/{id}", sygRealisation.getId()).with(csrf())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 

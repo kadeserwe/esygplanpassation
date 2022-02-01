@@ -9,7 +9,7 @@ import javax.persistence.Lob;
  * A DTO for the {@link sn.ssi.sigmap.domain.PlanPassation} entity.
  */
 public class PlanPassationDTO implements Serializable {
-
+    
     private Long id;
 
     private LocalDate dateDebut;
@@ -21,7 +21,7 @@ public class PlanPassationDTO implements Serializable {
     @NotNull
     private Integer annee;
 
-//    @NotNull
+    @NotNull
     private LocalDate dateCreation;
 
     private LocalDate dateMiseValidation;
@@ -66,7 +66,7 @@ public class PlanPassationDTO implements Serializable {
 
     private String numPlan;
 
-
+    
     public Long getId() {
         return id;
     }

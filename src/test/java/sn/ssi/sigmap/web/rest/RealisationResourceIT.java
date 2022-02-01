@@ -1,6 +1,7 @@
 package sn.ssi.sigmap.web.rest;
 
 import sn.ssi.sigmap.PlanpassationmsApp;
+import sn.ssi.sigmap.config.TestSecurityConfiguration;
 import sn.ssi.sigmap.domain.Realisation;
 import sn.ssi.sigmap.domain.PlanPassation;
 import sn.ssi.sigmap.repository.RealisationRepository;
@@ -25,13 +26,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link RealisationResource} REST controller.
  */
-@SpringBootTest(classes = PlanpassationmsApp.class)
+@SpringBootTest(classes = { PlanpassationmsApp.class, TestSecurityConfiguration.class })
 @AutoConfigureMockMvc
 @WithMockUser
 public class RealisationResourceIT {
@@ -215,7 +217,7 @@ public class RealisationResourceIT {
         int databaseSizeBeforeCreate = realisationRepository.findAll().size();
         // Create the Realisation
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isCreated());
@@ -258,7 +260,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -280,7 +282,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -300,7 +302,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -320,7 +322,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -340,7 +342,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -360,7 +362,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -380,7 +382,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -400,7 +402,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -420,7 +422,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -440,7 +442,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -460,7 +462,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -480,7 +482,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -500,7 +502,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -520,7 +522,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -540,7 +542,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -560,7 +562,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -580,7 +582,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -600,7 +602,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -620,7 +622,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -640,7 +642,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
 
-        restRealisationMockMvc.perform(post("/api/realisations")
+        restRealisationMockMvc.perform(post("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -763,7 +765,7 @@ public class RealisationResourceIT {
             .dateApprobationContrat(UPDATED_DATE_APPROBATION_CONTRAT);
         RealisationDTO realisationDTO = realisationMapper.toDto(updatedRealisation);
 
-        restRealisationMockMvc.perform(put("/api/realisations")
+        restRealisationMockMvc.perform(put("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isOk());
@@ -805,7 +807,7 @@ public class RealisationResourceIT {
         RealisationDTO realisationDTO = realisationMapper.toDto(realisation);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restRealisationMockMvc.perform(put("/api/realisations")
+        restRealisationMockMvc.perform(put("/api/realisations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(realisationDTO)))
             .andExpect(status().isBadRequest());
@@ -824,7 +826,7 @@ public class RealisationResourceIT {
         int databaseSizeBeforeDelete = realisationRepository.findAll().size();
 
         // Delete the realisation
-        restRealisationMockMvc.perform(delete("/api/realisations/{id}", realisation.getId())
+        restRealisationMockMvc.perform(delete("/api/realisations/{id}", realisation.getId()).with(csrf())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 

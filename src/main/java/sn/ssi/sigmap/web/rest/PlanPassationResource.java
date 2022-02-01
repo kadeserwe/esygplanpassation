@@ -1,6 +1,5 @@
 package sn.ssi.sigmap.web.rest;
 
-import org.springframework.boot.actuate.audit.AuditEvent;
 import sn.ssi.sigmap.service.PlanPassationService;
 import sn.ssi.sigmap.web.rest.errors.BadRequestAlertException;
 import sn.ssi.sigmap.service.dto.PlanPassationDTO;
@@ -22,9 +21,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,7 +28,7 @@ import java.util.Optional;
  * REST controller for managing {@link sn.ssi.sigmap.domain.PlanPassation}.
  */
 @RestController
-@RequestMapping("/api/plan-passations")
+@RequestMapping("/api")
 public class PlanPassationResource {
 
     private final Logger log = LoggerFactory.getLogger(PlanPassationResource.class);
@@ -55,7 +51,7 @@ public class PlanPassationResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new planPassationDTO, or with status {@code 400 (Bad Request)} if the planPassation has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/savePlan")
+    @PostMapping("/plan-passations")
     public ResponseEntity<PlanPassationDTO> createPlanPassation(@Valid @RequestBody PlanPassationDTO planPassationDTO) throws URISyntaxException {
         log.debug("REST request to save PlanPassation : {}", planPassationDTO);
         if (planPassationDTO.getId() != null) {
@@ -76,7 +72,7 @@ public class PlanPassationResource {
      * or with status {@code 500 (Internal Server Error)} if the planPassationDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/updatePlan")
+    @PutMapping("/plan-passations")
     public ResponseEntity<PlanPassationDTO> updatePlanPassation(@Valid @RequestBody PlanPassationDTO planPassationDTO) throws URISyntaxException {
         log.debug("REST request to update PlanPassation : {}", planPassationDTO);
         if (planPassationDTO.getId() == null) {
@@ -94,7 +90,7 @@ public class PlanPassationResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of planPassations in body.
      */
-    @GetMapping
+    @GetMapping("/plan-passations")
     public ResponseEntity<List<PlanPassationDTO>> getAllPlanPassations(Pageable pageable) {
         log.debug("REST request to get a page of PlanPassations");
         Page<PlanPassationDTO> page = planPassationService.findAll(pageable);
@@ -103,35 +99,12 @@ public class PlanPassationResource {
     }
 
     /**
-     * {@code GET  /audits} : get a page of {@link PlanPassationDTO} between the {@code fromDate} and {@code toDate}.
-     *
-     * @param fromDate the start of the time period of {@link PlanPassationDTO} to get.
-     * @param toDate the end of the time period of {@link PlanPassationDTO} to get.
-     * @param pageable the pagination information.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of {@link PlanPassationDTO} in body.
-     */
-    @GetMapping(params = {"fromDate", "toDate"})
-    public ResponseEntity<List<PlanPassationDTO>> getPlanPassationsByDates(
-        @RequestParam(value = "fromDate") LocalDate fromDate,
-        @RequestParam(value = "toDate") LocalDate toDate,
-        Pageable pageable) {
-
-//        Instant from = fromDate.atStartOfDay(ZoneId.systemDefault()).toInstant();
-//        Instant to = toDate.atStartOfDay(ZoneId.systemDefault()).plusDays(1).toInstant();
-
-        Page<PlanPassationDTO> page = planPassationService.findPlanPassationsByDates(fromDate, toDate, pageable);
-        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
-        return new ResponseEntity<>(page.getContent(), headers, HttpStatus.OK);
-    }
-
-
-    /**
      * {@code GET  /plan-passations/:id} : get the "id" planPassation.
      *
      * @param id the id of the planPassationDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the planPassationDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/{id}")
+    @GetMapping("/plan-passations/{id}")
     public ResponseEntity<PlanPassationDTO> getPlanPassation(@PathVariable Long id) {
         log.debug("REST request to get PlanPassation : {}", id);
         Optional<PlanPassationDTO> planPassationDTO = planPassationService.findOne(id);
@@ -144,7 +117,7 @@ public class PlanPassationResource {
      * @param id the id of the planPassationDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/plan-passations/{id}")
     public ResponseEntity<Void> deletePlanPassation(@PathVariable Long id) {
         log.debug("REST request to delete PlanPassation : {}", id);
         planPassationService.delete(id);

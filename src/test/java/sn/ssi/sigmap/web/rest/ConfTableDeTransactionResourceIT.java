@@ -1,6 +1,7 @@
 package sn.ssi.sigmap.web.rest;
 
 import sn.ssi.sigmap.PlanpassationmsApp;
+import sn.ssi.sigmap.config.TestSecurityConfiguration;
 import sn.ssi.sigmap.domain.ConfTableDeTransaction;
 import sn.ssi.sigmap.repository.ConfTableDeTransactionRepository;
 import sn.ssi.sigmap.service.ConfTableDeTransactionService;
@@ -30,6 +31,7 @@ import java.util.UUID;
 import static sn.ssi.sigmap.web.rest.TestUtil.sameInstant;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -37,7 +39,7 @@ import sn.ssi.sigmap.domain.enumeration.DataType;
 /**
  * Integration tests for the {@link ConfTableDeTransactionResource} REST controller.
  */
-@SpringBootTest(classes = PlanpassationmsApp.class)
+@SpringBootTest(classes = { PlanpassationmsApp.class, TestSecurityConfiguration.class })
 @AutoConfigureMockMvc
 @WithMockUser
 public class ConfTableDeTransactionResourceIT {

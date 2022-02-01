@@ -1,6 +1,7 @@
 package sn.ssi.sigmap.web.rest;
 
 import sn.ssi.sigmap.PlanpassationmsApp;
+import sn.ssi.sigmap.config.TestSecurityConfiguration;
 import sn.ssi.sigmap.domain.ModePassation;
 import sn.ssi.sigmap.repository.ModePassationRepository;
 
@@ -18,13 +19,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link ModePassationResource} REST controller.
  */
-@SpringBootTest(classes = PlanpassationmsApp.class)
+@SpringBootTest(classes = { PlanpassationmsApp.class, TestSecurityConfiguration.class })
 @AutoConfigureMockMvc
 @WithMockUser
 public class ModePassationResourceIT {
@@ -86,7 +88,7 @@ public class ModePassationResourceIT {
     public void createModePassation() throws Exception {
         int databaseSizeBeforeCreate = modePassationRepository.findAll().size();
         // Create the ModePassation
-        restModePassationMockMvc.perform(post("/api/mode-passations")
+        restModePassationMockMvc.perform(post("/api/mode-passations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(modePassation)))
             .andExpect(status().isCreated());
@@ -109,7 +111,7 @@ public class ModePassationResourceIT {
         modePassation.setId(1L);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restModePassationMockMvc.perform(post("/api/mode-passations")
+        restModePassationMockMvc.perform(post("/api/mode-passations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(modePassation)))
             .andExpect(status().isBadRequest());
@@ -130,7 +132,7 @@ public class ModePassationResourceIT {
         // Create the ModePassation, which fails.
 
 
-        restModePassationMockMvc.perform(post("/api/mode-passations")
+        restModePassationMockMvc.perform(post("/api/mode-passations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(modePassation)))
             .andExpect(status().isBadRequest());
@@ -149,7 +151,7 @@ public class ModePassationResourceIT {
         // Create the ModePassation, which fails.
 
 
-        restModePassationMockMvc.perform(post("/api/mode-passations")
+        restModePassationMockMvc.perform(post("/api/mode-passations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(modePassation)))
             .andExpect(status().isBadRequest());
@@ -168,7 +170,7 @@ public class ModePassationResourceIT {
         // Create the ModePassation, which fails.
 
 
-        restModePassationMockMvc.perform(post("/api/mode-passations")
+        restModePassationMockMvc.perform(post("/api/mode-passations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(modePassation)))
             .andExpect(status().isBadRequest());
@@ -233,7 +235,7 @@ public class ModePassationResourceIT {
             .code(UPDATED_CODE)
             .description(UPDATED_DESCRIPTION);
 
-        restModePassationMockMvc.perform(put("/api/mode-passations")
+        restModePassationMockMvc.perform(put("/api/mode-passations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(updatedModePassation)))
             .andExpect(status().isOk());
@@ -253,7 +255,7 @@ public class ModePassationResourceIT {
         int databaseSizeBeforeUpdate = modePassationRepository.findAll().size();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restModePassationMockMvc.perform(put("/api/mode-passations")
+        restModePassationMockMvc.perform(put("/api/mode-passations").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(modePassation)))
             .andExpect(status().isBadRequest());
@@ -272,7 +274,7 @@ public class ModePassationResourceIT {
         int databaseSizeBeforeDelete = modePassationRepository.findAll().size();
 
         // Delete the modePassation
-        restModePassationMockMvc.perform(delete("/api/mode-passations/{id}", modePassation.getId())
+        restModePassationMockMvc.perform(delete("/api/mode-passations/{id}", modePassation.getId()).with(csrf())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 

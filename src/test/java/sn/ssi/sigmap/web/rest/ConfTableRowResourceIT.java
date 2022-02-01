@@ -1,6 +1,7 @@
 package sn.ssi.sigmap.web.rest;
 
 import sn.ssi.sigmap.PlanpassationmsApp;
+import sn.ssi.sigmap.config.TestSecurityConfiguration;
 import sn.ssi.sigmap.domain.ConfTableRow;
 import sn.ssi.sigmap.repository.ConfTableRowRepository;
 import sn.ssi.sigmap.service.ConfTableRowService;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -26,7 +28,7 @@ import sn.ssi.sigmap.domain.enumeration.DataType;
 /**
  * Integration tests for the {@link ConfTableRowResource} REST controller.
  */
-@SpringBootTest(classes = PlanpassationmsApp.class)
+@SpringBootTest(classes = { PlanpassationmsApp.class, TestSecurityConfiguration.class })
 @AutoConfigureMockMvc
 @WithMockUser
 public class ConfTableRowResourceIT {
@@ -96,7 +98,7 @@ public class ConfTableRowResourceIT {
     public void createConfTableRow() throws Exception {
         int databaseSizeBeforeCreate = confTableRowRepository.findAll().size();
         // Create the ConfTableRow
-        restConfTableRowMockMvc.perform(post("/api/conf-table-rows")
+        restConfTableRowMockMvc.perform(post("/api/conf-table-rows").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(confTableRow)))
             .andExpect(status().isCreated());
@@ -120,7 +122,7 @@ public class ConfTableRowResourceIT {
         confTableRow.setId(1L);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restConfTableRowMockMvc.perform(post("/api/conf-table-rows")
+        restConfTableRowMockMvc.perform(post("/api/conf-table-rows").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(confTableRow)))
             .andExpect(status().isBadRequest());
@@ -190,7 +192,7 @@ public class ConfTableRowResourceIT {
             .columnName(UPDATED_COLUMN_NAME)
             .dataType(UPDATED_DATA_TYPE);
 
-        restConfTableRowMockMvc.perform(put("/api/conf-table-rows")
+        restConfTableRowMockMvc.perform(put("/api/conf-table-rows").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(updatedConfTableRow)))
             .andExpect(status().isOk());
@@ -211,7 +213,7 @@ public class ConfTableRowResourceIT {
         int databaseSizeBeforeUpdate = confTableRowRepository.findAll().size();
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restConfTableRowMockMvc.perform(put("/api/conf-table-rows")
+        restConfTableRowMockMvc.perform(put("/api/conf-table-rows").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(confTableRow)))
             .andExpect(status().isBadRequest());
@@ -230,7 +232,7 @@ public class ConfTableRowResourceIT {
         int databaseSizeBeforeDelete = confTableRowRepository.findAll().size();
 
         // Delete the confTableRow
-        restConfTableRowMockMvc.perform(delete("/api/conf-table-rows/{id}", confTableRow.getId())
+        restConfTableRowMockMvc.perform(delete("/api/conf-table-rows/{id}", confTableRow.getId()).with(csrf())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 

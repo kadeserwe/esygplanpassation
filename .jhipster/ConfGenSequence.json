@@ -4,9 +4,7 @@
     {
       "fieldName": "tableName",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "maxlength"
-      ],
+      "fieldValidateRules": ["maxlength"],
       "fieldValidateRulesMaxlength": "100"
     },
     {

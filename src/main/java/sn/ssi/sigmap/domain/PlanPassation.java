@@ -33,12 +33,12 @@ public class PlanPassation implements Serializable {
     @Column(name = "commentaire")
     private String commentaire;
 
-
-    @Column(name = "annee")
+    @NotNull
+    @Column(name = "annee", nullable = false)
     private Integer annee;
 
-
-    @Column(name = "date_creation")
+    @NotNull
+    @Column(name = "date_creation", nullable = false)
     private LocalDate dateCreation;
 
     @Column(name = "date_mise_validation")

@@ -4,16 +4,12 @@
     {
       "fieldName": "libelle",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "dateAttribution",
       "fieldType": "LocalDate",
-      "fieldValidateRules": [
-        "required"
-      ]
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "delaiexecution",

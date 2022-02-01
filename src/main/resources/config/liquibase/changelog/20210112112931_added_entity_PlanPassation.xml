@@ -6,7 +6,7 @@
     xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-
+    
     <!--
         Added the entity PlanPassation.
     -->
@@ -25,10 +25,10 @@
                 <constraints nullable="true" />
             </column>
             <column name="annee" type="integer">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="date_creation" type="date">
-                <constraints nullable="true" />
+                <constraints nullable="false" />
             </column>
             <column name="date_mise_validation" type="date">
                 <constraints nullable="true" />

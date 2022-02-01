@@ -1,6 +1,7 @@
 package sn.ssi.sigmap.config.timezone;
 
 import sn.ssi.sigmap.PlanpassationmsApp;
+import sn.ssi.sigmap.config.TestSecurityConfiguration;
 import sn.ssi.sigmap.repository.timezone.DateTimeWrapper;
 import sn.ssi.sigmap.repository.timezone.DateTimeWrapperRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 /**
  * Integration tests for the ZoneId Hibernate configuration.
  */
-@SpringBootTest(classes = PlanpassationmsApp.class)
+@SpringBootTest(classes = {PlanpassationmsApp.class, TestSecurityConfiguration.class})
 public class HibernateTimeZoneIT {
 
     @Autowired

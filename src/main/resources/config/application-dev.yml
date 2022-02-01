@@ -44,9 +44,9 @@ spring:
       indent-output: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:postgresql://localhost:5432/planpassation
+    url: jdbc:postgresql://localhost:5432/planpassationms
     username: postgres
-    password: passer
+    password: admin
     hikari:
       poolName: Hikari
       auto-commit: false
@@ -102,14 +102,6 @@ jhipster:
   #     exposed-headers: "Authorization,Link,X-Total-Count"
   #     allow-credentials: true
   #     max-age: 1800
-  security:
-    authentication:
-      jwt:
-        # This token must be encoded using Base64 and be at least 256 bits long (you can type `openssl rand -base64 64` on your command line to generate a 512 bits one)
-        base64-secret: ZjgzMDdlNjQ0ODFjNjZmZmQyMDkxNDBkYWRlZDk0OGIxYTMwZDliYWIzZDNkNjI0MjU3NmU2Yzk5Yjc0MGNjYjAxODFkMjc4NzM5ZDhlNTgwNWUzMDdjYWZjZDRkZGY4NmVhZTdmODcwOTBmMjQzZjg5NzBmMGM1N2Q5NjFiNmU=
-        # Token is valid 24 hours
-        token-validity-in-seconds: 86400
-        token-validity-in-seconds-for-remember-me: 2592000
   mail: # specific JHipster mail property, for standard properties see MailProperties
     base-url: http://127.0.0.1:7072
   metrics:

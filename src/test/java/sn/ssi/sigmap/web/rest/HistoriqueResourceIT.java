@@ -1,6 +1,7 @@
 package sn.ssi.sigmap.web.rest;
 
 import sn.ssi.sigmap.PlanpassationmsApp;
+import sn.ssi.sigmap.config.TestSecurityConfiguration;
 import sn.ssi.sigmap.domain.Historique;
 import sn.ssi.sigmap.domain.PlanPassation;
 import sn.ssi.sigmap.repository.HistoriqueRepository;
@@ -25,13 +26,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link HistoriqueResource} REST controller.
  */
-@SpringBootTest(classes = PlanpassationmsApp.class)
+@SpringBootTest(classes = { PlanpassationmsApp.class, TestSecurityConfiguration.class })
 @AutoConfigureMockMvc
 @WithMockUser
 public class HistoriqueResourceIT {
@@ -172,7 +174,7 @@ public class HistoriqueResourceIT {
         int databaseSizeBeforeCreate = historiqueRepository.findAll().size();
         // Create the Historique
         HistoriqueDTO historiqueDTO = historiqueMapper.toDto(historique);
-        restHistoriqueMockMvc.perform(post("/api/historiques")
+        restHistoriqueMockMvc.perform(post("/api/historiques").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(historiqueDTO)))
             .andExpect(status().isCreated());
@@ -207,7 +209,7 @@ public class HistoriqueResourceIT {
         HistoriqueDTO historiqueDTO = historiqueMapper.toDto(historique);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restHistoriqueMockMvc.perform(post("/api/historiques")
+        restHistoriqueMockMvc.perform(post("/api/historiques").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(historiqueDTO)))
             .andExpect(status().isBadRequest());
@@ -308,7 +310,7 @@ public class HistoriqueResourceIT {
             .fichierRejet2ContentType(UPDATED_FICHIER_REJET_2_CONTENT_TYPE);
         HistoriqueDTO historiqueDTO = historiqueMapper.toDto(updatedHistorique);
 
-        restHistoriqueMockMvc.perform(put("/api/historiques")
+        restHistoriqueMockMvc.perform(put("/api/historiques").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(historiqueDTO)))
             .andExpect(status().isOk());
@@ -342,7 +344,7 @@ public class HistoriqueResourceIT {
         HistoriqueDTO historiqueDTO = historiqueMapper.toDto(historique);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restHistoriqueMockMvc.perform(put("/api/historiques")
+        restHistoriqueMockMvc.perform(put("/api/historiques").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(historiqueDTO)))
             .andExpect(status().isBadRequest());
@@ -361,7 +363,7 @@ public class HistoriqueResourceIT {
         int databaseSizeBeforeDelete = historiqueRepository.findAll().size();
 
         // Delete the historique
-        restHistoriqueMockMvc.perform(delete("/api/historiques/{id}", historique.getId())
+        restHistoriqueMockMvc.perform(delete("/api/historiques/{id}", historique.getId()).with(csrf())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 

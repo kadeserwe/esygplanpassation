@@ -4,9 +4,7 @@
     {
       "fieldName": "nomTable",
       "fieldType": "String",
-      "fieldValidateRules": [
-        "maxlength"
-      ],
+      "fieldValidateRules": ["maxlength"],
       "fieldValidateRulesMaxlength": "100"
     },
     {

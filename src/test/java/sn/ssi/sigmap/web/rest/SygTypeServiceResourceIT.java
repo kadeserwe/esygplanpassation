@@ -1,6 +1,7 @@
 package sn.ssi.sigmap.web.rest;
 
 import sn.ssi.sigmap.PlanpassationmsApp;
+import sn.ssi.sigmap.config.TestSecurityConfiguration;
 import sn.ssi.sigmap.domain.SygTypeService;
 import sn.ssi.sigmap.repository.SygTypeServiceRepository;
 import sn.ssi.sigmap.service.SygTypeServiceService;
@@ -23,13 +24,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests for the {@link SygTypeServiceResource} REST controller.
  */
-@SpringBootTest(classes = PlanpassationmsApp.class)
+@SpringBootTest(classes = { PlanpassationmsApp.class, TestSecurityConfiguration.class })
 @AutoConfigureMockMvc
 @WithMockUser
 public class SygTypeServiceResourceIT {
@@ -91,7 +93,7 @@ public class SygTypeServiceResourceIT {
         int databaseSizeBeforeCreate = sygTypeServiceRepository.findAll().size();
         // Create the SygTypeService
         SygTypeServiceDTO sygTypeServiceDTO = sygTypeServiceMapper.toDto(sygTypeService);
-        restSygTypeServiceMockMvc.perform(post("/api/syg-type-services")
+        restSygTypeServiceMockMvc.perform(post("/api/syg-type-services").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygTypeServiceDTO)))
             .andExpect(status().isCreated());
@@ -113,7 +115,7 @@ public class SygTypeServiceResourceIT {
         SygTypeServiceDTO sygTypeServiceDTO = sygTypeServiceMapper.toDto(sygTypeService);
 
         // An entity with an existing ID cannot be created, so this API call must fail
-        restSygTypeServiceMockMvc.perform(post("/api/syg-type-services")
+        restSygTypeServiceMockMvc.perform(post("/api/syg-type-services").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygTypeServiceDTO)))
             .andExpect(status().isBadRequest());
@@ -135,7 +137,7 @@ public class SygTypeServiceResourceIT {
         SygTypeServiceDTO sygTypeServiceDTO = sygTypeServiceMapper.toDto(sygTypeService);
 
 
-        restSygTypeServiceMockMvc.perform(post("/api/syg-type-services")
+        restSygTypeServiceMockMvc.perform(post("/api/syg-type-services").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygTypeServiceDTO)))
             .andExpect(status().isBadRequest());
@@ -327,7 +329,7 @@ public class SygTypeServiceResourceIT {
             .libelle(UPDATED_LIBELLE);
         SygTypeServiceDTO sygTypeServiceDTO = sygTypeServiceMapper.toDto(updatedSygTypeService);
 
-        restSygTypeServiceMockMvc.perform(put("/api/syg-type-services")
+        restSygTypeServiceMockMvc.perform(put("/api/syg-type-services").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygTypeServiceDTO)))
             .andExpect(status().isOk());
@@ -348,7 +350,7 @@ public class SygTypeServiceResourceIT {
         SygTypeServiceDTO sygTypeServiceDTO = sygTypeServiceMapper.toDto(sygTypeService);
 
         // If the entity doesn't have an ID, it will throw BadRequestAlertException
-        restSygTypeServiceMockMvc.perform(put("/api/syg-type-services")
+        restSygTypeServiceMockMvc.perform(put("/api/syg-type-services").with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(TestUtil.convertObjectToJsonBytes(sygTypeServiceDTO)))
             .andExpect(status().isBadRequest());
@@ -367,7 +369,7 @@ public class SygTypeServiceResourceIT {
         int databaseSizeBeforeDelete = sygTypeServiceRepository.findAll().size();
 
         // Delete the sygTypeService
-        restSygTypeServiceMockMvc.perform(delete("/api/syg-type-services/{id}", sygTypeService.getId())
+        restSygTypeServiceMockMvc.perform(delete("/api/syg-type-services/{id}", sygTypeService.getId()).with(csrf())
             .accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isNoContent());
 
